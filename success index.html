@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Compressor</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #121212;
+            color: white;
+            flex-direction: column;
+        }
+        .container {
+            background: #1e1e1e;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
+        h2 {
+            margin-bottom: 15px;
+        }
+        input {
+            margin-top: 10px;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            background: #333;
+            color: white;
+        }
+        button {
+            margin-top: 15px;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            background: #6200ea;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+        }
+        button:hover {
+            background: #3700b3;
+        }
+        a {
+            display: block;
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            background: #03dac6;
+            color: black;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        a:hover {
+            background: #018786;
+        }
+        canvas {
+            display: none;
+        }
+        .ad-container {
+            margin-top: 20px;
+            background: #333;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            color: white;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Modern Image Compressor</h2>
+        <input type="file" id="upload" accept="image/*">
+        <br>
+        <canvas id="canvas"></canvas>
+        <br>
+        <button onclick="compressImage()">Compress Image</button>
+        <br>
+        <a id="download" style="display: none;" download="compressed.jpg">Download Compressed Image</a>
+        
+        <!-- Ad Placeholder -->
+        <div class="ad-container">
+            <p>Advertisement</p>
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                data-ad-slot="YYYYYYYYYY"
+                data-ad-format="auto"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+    </div>
+
+    <script>
+        function compressImage() {
+            const fileInput = document.getElementById('upload');
+            const canvas = document.getElementById('canvas');
+            const downloadLink = document.getElementById('download');
+            
+            if (fileInput.files.length === 0) {
+                alert('Please select an image first.');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function(event) {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = function() {
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0, img.width, img.height);
+                    
+                    canvas.toBlob(function(blob) {
+                        const url = URL.createObjectURL(blob);
+                        downloadLink.href = url;
+                        downloadLink.style.display = 'block';
+                        downloadLink.innerText = 'Download Compressed Image';
+                    }, 'image/jpeg', 0.5);
+                };
+            };
+        }
+    </script>
+</body>
+</html>
